@@ -1,0 +1,4 @@
+# Generated from compilation
+*.cof
+*.hex
+*.obj
