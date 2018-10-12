@@ -8,7 +8,7 @@ main:
   out   DDRB, r17   ; Setting PB5 as output
   ldi   r16,  0x80  ; Outputing to PIN 13th
 
-loop:
+blink:
   eor   r16,  r17   ; XOR should blink only PIN 7
   out   PORTB,r16   ; Updating PIN
 
@@ -18,8 +18,8 @@ delay:
   ; By initializing in 0xE00000 overflow is reached earlier
   ; Using only n-bits
   ldi   r18,  0x00
-  ldi   r19,  0x00
-  ldi   r20,  0xE0
+  ldi   r19,  0x30
+  ldi   r20,  0x67
 
 delay_loop:
   ; first byte
@@ -39,9 +39,9 @@ delay_loop_2:
   ; third byte, when this overflows it repeats
   inc   r20
   ; repeats until overflow
-  breq  end_delay
+  brvs  end_delay
   jmp   delay_loop
 
 end_delay:
   ; Blink again
-  jmp   loop
+  jmp   blink
