@@ -2,3 +2,4 @@
 *.cof
 *.hex
 *.obj
+*.out

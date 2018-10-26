@@ -31,14 +31,23 @@ the instructions.
 
 # Compiling & loading
 
-Inside any example folder, the next lines should compile and update to your
-Arduino. In this example we'll use `examples/led`.
+## Assembly
+
+Inside some example folders, the one containing `.s` extension files, the next
+lines should compile and update to your Arduino. In this example we'll use
+`examples/led`.
 
 ```bash
 cd examples/led
 avra led.s
 sudo avrdude -p m2560 -c stk500v2 -P /dev/ttyACM0 -D -U led.s.hex
 ```
+
+# C
+
+Inside some example folders, the one containing `.c` extension files, the next
+lines should compile and update to your Arduino. In this example we'll use
+`examples/pingpong`.
 
 ```bash
 avr-gcc -mmcu=atmega2560 game.c
