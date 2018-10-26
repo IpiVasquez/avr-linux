@@ -40,4 +40,10 @@ avra led.s
 sudo avrdude -p m2560 -c stk500v2 -P /dev/ttyACM0 -D -U led.s.hex
 ```
 
+```bash
+avr-gcc -mmcu=atmega2560 game.c
+avr-objcopy -O ihex a.out game.hex
+sudo avrdude -p m2560 -c stk500v2 -b 115200 -P /dev/ttyACM0 -D -U game.hex
+```
+
 [avra-2560]: https://github.com/timofurrer/avra-atmega
