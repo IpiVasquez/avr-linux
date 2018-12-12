@@ -8,7 +8,7 @@
 void init() {
   // Baud ...
   UBRR0L = BAUDRATE;
-  UBRR0H = (BAUDRATE >> 8);
+  UBRR0H = BAUDRATE >> 8;
   // Asincrono
   // Sin paridad
   // 1 bit de paro
@@ -19,7 +19,7 @@ void init() {
 }
 
 // Lee
-char read() {
+char rx() {
   // Espera en lo que llegan datos
   while (!(UCSR0A & (1 << RXC0)))
     ;
@@ -28,7 +28,7 @@ char read() {
 }
 
 // Envia algun caracter
-void write(char data) {
+void tx(char data) {
   // Espera a que este listo el transmisor
   while (!(UCSR0A & (1 << UDRE0)))
     ;
@@ -43,10 +43,10 @@ void main() {
 
   while (1) {
     // Lee
-    data = read();
+    data = rx();
 
     // Cuando recibas, devuelvelo
-    write(data);
-    write('\n'); // Pa que se vea bonito
+    tx(data);
+    tx('\n'); // Pa que se vea bonito
   }
 }

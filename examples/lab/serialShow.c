@@ -1,3 +1,4 @@
+#include <avr/interrupt.h>
 #include <avr/io.h>
 #include <inttypes.h>
 
@@ -8,7 +9,7 @@
 void init() {
   // Baud ...
   UBRR0L = BAUDRATE;
-  UBRR0H = (BAUDRATE >> 8);
+  UBRR0H = BAUDRATE >> 8;
   // Asincrono
   // Sin paridad
   // 1 bit de paro
@@ -19,7 +20,7 @@ void init() {
 }
 
 // Lee
-char read() {
+char rx() {
   // Espera en lo que llegan datos
   while (!(UCSR0A & (1 << RXC0)))
     ;
@@ -28,7 +29,7 @@ char read() {
 }
 
 // Envia algun caracter
-void write(char data) {
+void tx(char data) {
   // Espera a que este listo el transmisor
   while (!(UCSR0A & (1 << UDRE0)))
     ;
@@ -39,14 +40,25 @@ void write(char data) {
 
 void main() {
   char data;
+  DDRC = 0xFF;
+  DDRB = 0x80;
   init();
+
+  // Interrupciones externas
+  EICRA |= 0x0F; // Flanco de subida
+  EIMSK |= 0x03; // Interrupciones externas 0
+  sei();
 
   while (1) {
     // Lee
-    data = read();
-
+    data = rx();
     // Cuando recibas, devuelvelo
-    write(data);
-    write('\n'); // Pa que se vea bonito
+    PORTC = data;
   }
+}
+
+ISR(INT0_vect) {
+  PORTB = !PORTB;
+  tx('0');
+  tx('\n');
 }
