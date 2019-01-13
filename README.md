@@ -20,7 +20,7 @@ board.
 
 ```bash
 # On Ubuntu, this should install all deps
-sudo apt install avra avra-libc avrdude
+sudo apt install avra avr-libc avrdude
 ```
 
 ## Avra 2560
