@@ -1,41 +1,56 @@
 #include <avr/io.h>
-#include <util/delay.h>
-
-int matrix[][4] = {
-    {1, 2, 3, 10}, {4, 5, 6, 11}, {7, 8, 9, 12}, {13, 0, 15, 14}};
-
-int teclado() {
-  if (PINC & 0x0F && PINC & 0xF0) {
-    short x = 0;
-    short y = 0;
-
-    for (int i = 0; i < 4; i++) {
-      if (PINC & (1 << i))
-        y = i;
-      if (PINC & (1 << (i + 4)))
-        x = i;
-    }
-
-    return matrix[x][y];
-  }
-
-  return 0;
-}
-
-// void show(int key) {
-//   lcd.setCursor(cursor_pos, line_pos);
-//   lcd.print(key);
-// }
-
+// http://winavr.scienceprog.com/example-avr-projects/4x4-keypad-example-using-avr-gcc-c-language.html
 int main() {
-  DDRA |= 0x0F;
-  DDRC = 0x00;
-
-  while (1) {
-    int tec = teclado();
-    // if (tec) {
-    PORTA = tec;
-    // }
-    _delay_ms(1000);
+  // high nibble for output(columns) low for input(rows);
+  DDRC = 0xF0;
+  // enable internal pullups for PB0-PB3
+  PORTC = 0x0F;
+  // Port D for indication only
+  DDRD = 0xFF;
+  while (1) // loop key check forever
+  {
+    // first column
+    PORTC = 0b01111111;
+    // check for rows and send key number to portD
+    // instead sending key number to PORTD you can use
+    // any function that serves pressed button
+    if (bit_is_set(PINC, 3))
+      PORTD = 1;
+    if (bit_is_set(PINC, 2))
+      PORTD = 2;
+    if (bit_is_set(PINC, 1))
+      PORTD = 3;
+    if (bit_is_set(PINC, 0))
+      PORTD = 4;
+    // second column
+    PORTB = 0b10111111;
+    if (bit_is_set(PINC, 3))
+      PORTD = 5;
+    if (bit_is_set(PINC, 2))
+      PORTD = 6;
+    if (bit_is_set(PINC, 1))
+      PORTD = 7;
+    if (bit_is_set(PINC, 0))
+      PORTD = 8;
+    // third column
+    PORTB = 0b11011111;
+    if (bit_is_set(PINC, 3))
+      PORTD = 9;
+    if (bit_is_set(PINC, 2))
+      PORTD = 10;
+    if (bit_is_set(PINC, 1))
+      PORTD = 11;
+    if (bit_is_set(PINC, 0))
+      PORTD = 12;
+    // fourth column
+    PORTB = 0b11101111;
+    if (bit_is_set(PINC, 3))
+      PORTD = 13;
+    if (bit_is_set(PINC, 2))
+      PORTD = 14;
+    if (bit_is_set(PINC, 1))
+      PORTD = 15;
+    if (bit_is_set(PINC, 0))
+      PORTD = 16;
   }
 }
